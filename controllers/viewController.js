@@ -16,7 +16,6 @@ exports.getTour = catchAsync(async (req, res, next) => {
   if(!tour){
     return next(new appError('there is no tour with that name',400))
   }
-  console.log(bookings);
   res.status(200).render('tour',{
     title:tour.name,
     tour,

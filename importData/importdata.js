@@ -7,7 +7,6 @@ const fs = require('fs')
 const data = JSON.parse(fs.readFileSync('./tours.json', 'utf-8'))
 const data1 = JSON.parse(fs.readFileSync('./reviews.json', 'utf-8'))
 const data2 = JSON.parse(fs.readFileSync('./users.json', 'utf-8'))
-console.log(process.argv)
 dotenv.config()
 mongoose.connect("mongodb://127.0.0.1:27017/natours").then((con) => {
   console.log("let's go")

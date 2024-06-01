@@ -4,12 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "webpack --config  webpack.config.js --mode=production",
+    "watch": "webpack --config webpack.config.js --mode=development",
     "start": "nodemon server.js",
     "debug": "ndb server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js",
-    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
-    "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+    "start:prod": "NODE_ENV=production nodemon server.js"
   },
   "author": "Morteza Ahmadiniya",
   "license": "ISC",
@@ -18,6 +17,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "browserify": "^17.0.0",
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",

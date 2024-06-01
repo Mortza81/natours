@@ -3,7 +3,7 @@ import { showAlert } from "./alerts";
 export const signup=async (data)=>{
     try{
     const res=await axios({
-        url:'http://localhost:7000/api/v1/users/signup',
+        url:'/api/v1/users/signup',
         data,
         method:'post'
     })
