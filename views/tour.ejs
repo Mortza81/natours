@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
+
+    <title>Natours | The Park Camper Tour</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <%- include('header') %>
+
+    <section class="section-header">
+        <div class="header__hero">
+            <div class="header__hero-overlay"> &nbsp; </div>
+            <img class="header__hero-img" src='/img/tours/<%= tour.imageCover %>' alt='<%= tour.name %>'>
+        </div>
+        <div class="heading-box">
+            <h1 class="heading-primary">
+                <span><%= tour.name %> TOUR</span>
+            </h1>
+            <div class="heading-box__group">
+                <div class="heading-box__detail">
+                    <svg class="heading-box__icon">
+                        <use xlink:href="/img/icons.svg#icon-clock"></use>
+                    </svg>
+                    <span class="heading-box__text"><%= tour.duration + ' ' %>DAYS</span>
+                </div>
+                <div class="heading-box__detail">
+                    <svg class="heading-box__icon">
+                        <use xlink:href="/img/icons.svg#icon-map-pin"></use>
+                    </svg>
+                    <span class="heading-box__text"><%= tour.startLocation.description %></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-description">
+        <div class="overview-box">
+            <div>
+                <div class="overview-box__group">
+                    <h2 class="heading-secondary ma-bt-lg">Quick facts</h2>
+                    <div class="overview-box__detail">
+                        <svg class="overview-box__icon">
+                            <use xlink:href="/img/icons.svg#icon-calendar"></use>
+                        </svg>
+                        <span class="overview-box__label">start date</span>
+                        <span class="overview-box__text"><%= tour.startDate.toLocaleString('en-us', { month: 'long', year: 'numeric' }) %></span>
+                    </div>
+                    <div class="overview-box__detail">
+                        <svg class="overview-box__icon">
+                            <use xlink:href="/img/icons.svg#icon-trending-up"></use>
+                        </svg>
+                        <span class="overview-box__label">Difficulty</span>
+                        <span class="overview-box__text"><%= tour.difficulty %></span>
+                    </div>
+                    <div class="overview-box__detail">
+                        <svg class="overview-box__icon">
+                            <use xlink:href="/img/icons.svg#icon-user"></use>
+                        </svg>
+                        <span class="overview-box__label">Participants</span>
+                        <span class="overview-box__text"><%= tour.maxGroupSize %></span>
+                    </div>
+                    <div class="overview-box__detail">
+                        <svg class="overview-box__icon">
+                            <use xlink:href="/img/icons.svg#icon-star"></use>
+                        </svg>
+                        <span class="overview-box__label">Rating</span>
+                        <span class="overview-box__text"><%= tour.ratingsAverage %> / 5</span>
+                    </div>
+                    <div class="overview-box__detail">
+                        <svg class="overview-box__icon">
+                            <use xlink:href="/img/icons.svg#icon-dollar-sign"></use>
+                        </svg>
+                        <span class="overview-box__label">Price</span>
+                        <span class="overview-box__text price"><%= tour.price %></span>
+                    </div>
+                </div>
+
+                <div class="overview-box__group">
+                    <h2 class="heading-secondary ma-bt-lg">Your tour guide</h2>
+                        <div class="overview-box__detail">
+                            <img src="/img/users/<%= tour.guide.photo %>" alt="Lead guide" class="overview-box__img" />
+                            <span class="overview-box__text"><%= tour.guide.name %></span>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description-box">
+            <h2 class="heading-secondary ma-bt-lg">About the <%= tour.name %> tour</h2>
+            <% const description = tour.description.split('\n') %>
+            <% description.forEach(element => { %>
+                <p class="description__text">
+                    <%= element %>
+                </p>
+            <% }) %>
+        </div>
+    </section>
+
+    <section class="section-pictures">
+        <% tour.images.forEach(image => { %>
+            <div class="picture-box">
+                <img class="picture-box__img picture-box__img--1" src="/img/tours/<%= image %>" alt="<%= tour.name %>" />
+            </div>
+        <% }) %>
+    </section>
+
+    <section class="section-map">
+        <div id="map" data-locations="<%= JSON.stringify(tour.locations) %>"></div>
+    </section>
+
+    <section class="section-reviews">
+        <div class="reviews">
+            <% tour.reviews.forEach(review => { %>
+                <div class="reviews__card">
+                    <div class="reviews__avatar">
+                        <img src="/img/users/<%= review.user.photo %>" alt="<%= review.user.name %>" class="reviews__avatar-img" />
+                        <h6 class="reviews__user"><%= review.user.name %></h6>
+                    </div>
+                    <p class="reviews__text"><%= review.review %></p>
+                    <div class="reviews__rating">
+                        <% const rating = review.rating %>
+                        <% for (let index = 0; index < rating - 1; index++) { %>
+                            <svg class="reviews__star reviews__star--active">
+                                <use xlink:href="/img/icons.svg#icon-star"></use>
+                            </svg>
+                        <% } %>
+                        <% for (let index = 0; index < 6 - rating; index++) { %>
+                            <svg class="reviews__star reviews__star--inactive">
+                                <use xlink:href="/img/icons.svg#icon-star"></use>
+                            </svg>
+                        <% } %>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+        <!-- Create Review Section -->
+
+  </section>
+  <div class="create-review">
+    <h2 class="heading-secondary ma-bt-lg">Leave a Review</h2>
+    <form class="review-form" data-tour-id="<%= tour.id %>">
+        <div class="form__group">
+            <label for="rating" class="form__label">Rating</label>
+            <select id="rating" class="form__input" required>
+                <option value="1">1 - Poor</option>
+                <option value="2">2 - Fair</option>
+                <option value="3">3 - Good</option>
+                <option value="4">4 - Very Good</option>
+                <option value="5">5 - Excellent</option>
+            </select>
+        </div>
+        <div class="form__group">
+            <label for="review" class="form__label">Your Review</label>
+            <textarea id="review" class="form__input" placeholder="Write your review here..." rows="4" required></textarea>
+        </div>
+        <div class="form__group">
+            <button type="submit" class="btn btn--green">Submit Review</button>
+        </div>
+    </form>
+</div>
+    </section>
+
+    <section class="section-cta">
+        <div class="cta">
+            <div class="cta__img cta__img--logo">
+                <img src="/img/logo-white.png" alt="Natours logo" />
+            </div>
+            <img src="/img/tours/<%= tour.images[0] %>" alt="" class="cta__img cta__img--1" />
+            <img src="/img/tours/<%= tour.images[1] %>" alt="" class="cta__img cta__img--2" />
+            <div class="cta__content">
+                <h2 class="heading-secondary">What are you waiting for?</h2>
+                <p class="cta__text">
+                    <%= tour.duration %> days. 1 adventure. Infinite memories. Make it yours today!
+                </p>
+                <% if (locals.user) { %>
+                    <% if (bookings[0] !== undefined) { %>
+                        <% if (bookings[0].user.id === user.id) { %>
+                            <button class="btn btn--green span-all-rows cancel-tour" data-booking-id="<%= bookings[0]._id %>">Cancel the booking</button>
+                        <% } else { %>
+                            <button class="btn btn--green span-all-rows bookbtn" data-tour-id="<%= tour.id %>">Book tour now!</button>
+                        <% } %>
+                    <% } else { %>
+                        <button class="btn btn--green span-all-rows bookbtn" data-tour-id="<%= tour.id %>">Book tour now!</button>
+                    <% } %>
+                <% } else { %>
+                    <a href="/login" class="btn btn--green span-all-rows">Login to book the tour</a>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <%- include('footer') %>
+
+    <script>
+        // Get locations data
+        const locations = JSON.parse(document.getElementById('map').dataset.locations);
+
+        // Initialize map
+        const map = L.map('map').setView(
+            [locations[0].coordinates[1], locations[0].coordinates[0]],
+            9
+        );
+
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add markers
+        locations.forEach(loc => {
+            L.marker([loc.coordinates[1], loc.coordinates[0]])
+                .addTo(map)
+                .bindPopup(`<p style="font-size: 16px;">Day ${loc.day}: ${loc.description}</p>`);
+        });
+    </script>
+</body>
+<%- include('scripts') %>
+</html>

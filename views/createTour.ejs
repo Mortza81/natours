@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- Flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>Create Tour</title>
+  <!-- Add Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+  <%- include('header') %>
+
+  <section class="main">
+    <div class="container">
+      <h2 class="heading-secondary ma-bt-lg">Create a New Tour</h2>
+      <form class="create-tour-form" id="createTourForm" enctype="multipart/form-data">
+        <!-- Tour Name -->
+        <div class="form__group">
+          <label for="name" class="form__label">Tour Name</label>
+          <input type="text" id="name" class="form__input" placeholder="Enter tour name" minlength="10" maxlength="40" />
+        </div>
+
+        <!-- Duration -->
+        <div class="form__group">
+          <label for="duration" class="form__label">Duration (in days)</label>
+          <input type="number" id="duration" class="form__input" placeholder="Enter duration" min="1" />
+        </div>
+
+        <!-- Group Size -->
+        <div class="form__group">
+          <label for="maxGroupSize" class="form__label">Maximum Group Size</label>
+          <input type="number" id="maxGroupSize" class="form__input" placeholder="Enter group size" min="1" />
+        </div>
+
+        <!-- Difficulty -->
+        <div class="form__group">
+          <label for="difficulty" class="form__label">Difficulty</label>
+          <select id="difficulty" class="form__input">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="difficult">Difficult</option>
+          </select>
+        </div>
+
+        <!-- Price -->
+        <div class="form__group">
+          <label for="price" class="form__label">Price</label>
+          <input type="number" id="price" class="form__input" placeholder="Enter price" min="0" step="0.01" />
+        </div>
+
+        <!-- Summary -->
+        <div class="form__group">
+          <label for="summary" class="form__label">Summary</label>
+          <textarea id="summary" class="form__input" placeholder="Enter summary" rows="4"></textarea>
+        </div>
+
+        <!-- Description -->
+        <div class="form__group">
+          <label for="description" class="form__label">Description</label>
+          <textarea id="description" class="form__input" placeholder="Enter description" rows="6"></textarea>
+        </div>
+
+        <!-- Cover Image -->
+        <div class="form__group">
+          <label for="imageCover" class="form__label">Upload Cover Image</label>
+          <input type="file" id="imageCover" class="form__input" accept="image/*" />
+        </div>
+
+        <!-- Additional Images -->
+        <div class="form__group">
+          <label for="images" class="form__label">Upload Additional Images</label>
+          <input type="file" id="images" class="form__input" accept="image/*" multiple />
+        </div>
+
+        <!-- Start Date -->
+        <div class="form__group">
+          <label for="startDate" class="form__label">Start Date</label>
+          <input type="text" id="startDate" class="form__input" placeholder="Select start date" />
+        </div>
+
+        <!-- Start Location -->
+        <div class="form__group">
+          <label class="form__label">Start Location</label>
+          <div class="start-location-group">
+            <input type="text" id="startLocationAddress" class="form__input" placeholder="Enter address" />
+            <input type="text" id="startLocationCoordinates" class="form__input" placeholder="Enter coordinates (e.g., 40.7128, -74.0060)" />
+            <textarea id="startLocationDescription" class="form__input" placeholder="Enter description" rows="2"></textarea>
+          </div>
+        </div>
+
+        <!-- Locations -->
+        <div class="form__group">
+          <label class="form__label">Locations</label>
+          <div id="locations-container">
+            <!-- Initial location input -->
+            <div class="location-group">
+              <input type="text" class="form__input location-address" placeholder="Enter address" />
+              <input type="text" class="form__input location-coordinates" placeholder="Enter coordinates (e.g., 40.7128, -74.0060)" />
+              <textarea class="form__input location-description" placeholder="Enter description" rows="2"></textarea>
+              <input type="number" class="form__input location-day" placeholder="Day of tour" min="1" />
+              <button type="button" class="btn-remove-location btn--small btn--error" style="display: none;">Remove</button>
+            </div>
+          </div>
+          <button type="button" id="add-location-btn" class="btn btn--small btn--green">Add Another Location</button>
+        </div>
+
+        <!-- Guide -->
+        <div class="form__group">
+          <label for="guide" class="form__label">Guide</label>
+          <select id="guide" class="form__input" style="width: 100%;">
+            <% users.forEach(user => { %>
+              <option value="<%= user._id %>"><%= user.name %> (<%= user.email %>)</option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form__group">
+          <button type="submit" class="btn btn--green">Create Tour</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    const locationsContainer = document.getElementById('locations-container');
+    const addLocationButton = document.getElementById('add-location-btn');
+    document.addEventListener('DOMContentLoaded', () => {
+  flatpickr("#startDate", {
+    dateFormat: "Y-m-d", 
+    minDate: "today",   
+    allowInput: false,   
+    defaultDate: "today" 
+  });
+});
+
+
+      function createLocationInputGroup() {
+        const group = document.createElement('div');
+        group.classList.add('location-group');
+
+        const addressInput = document.createElement('input');
+        addressInput.type = 'text';
+        addressInput.classList.add('form__input', 'location-address');
+        addressInput.placeholder = 'Enter address';
+        addressInput = true;
+
+        const coordinatesInput = document.createElement('input');
+        coordinatesInput.type = 'text';
+        coordinatesInput.classList.add('form__input', 'location-coordinates');
+        coordinatesInput.placeholder = 'Enter coordinates (e.g., 40.7128, -74.0060)';
+        coordinatesInput = true;
+
+        const descriptionInput = document.createElement('textarea');
+        descriptionInput.classList.add('form__input', 'location-description');
+        descriptionInput.placeholder = 'Enter description';
+        descriptionInput.rows = 2;
+
+        const dayInput = document.createElement('input');
+        dayInput.type = 'number';
+        dayInput.classList.add('form__input', 'location-day');
+        dayInput.placeholder = 'Day of tour';
+        dayInput = true;
+        dayInput.min = 1;
+
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.classList.add('btn-remove-location', 'btn--small', 'btn--error');
+        removeButton.textContent = 'Remove';
+        removeButton.style.display = 'inline-block';
+
+        removeButton.addEventListener('click', () => {
+          locationsContainer.removeChild(group);
+        });
+
+        group.appendChild(addressInput);
+        group.appendChild(coordinatesInput);
+        group.appendChild(descriptionInput);
+        group.appendChild(dayInput);
+        group.appendChild(removeButton);
+
+        return group;
+      }
+
+      addLocationButton.addEventListener('click', () => {
+        const newGroup = createLocationInputGroup();
+        locationsContainer.appendChild(newGroup);
+      });
+
+  </script>
+</body>
+  <%- include('footer') %>
+  <%- include('scripts') %>
+</html>
