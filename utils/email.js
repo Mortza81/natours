@@ -9,15 +9,6 @@ module.exports=class Email{
     this.from=`Moretza Ahmadi <${process.env.EMAIL_FROM}>`
   }
   newTransport(){
-    if(process.env.NODE_ENV=='production'){
-      return nodemailer.createTransport({
-        service:'gmail',
-        auth:{
-          user:process.env.GMAIL_USER,
-          pass:process.env.GMAIL_PASSWORD
-        }
-      })
-    }
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,

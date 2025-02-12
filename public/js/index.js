@@ -51,7 +51,6 @@ if (createTourForm) {
       const locations = [];
       const locationGroups = document.querySelectorAll('.location-group');
       locationGroups.forEach(group => {
-        console.log(group);
         const address = group.querySelector('.location-address').value.trim();
         const coordinates = group.querySelector('.location-coordinates').value.trim().split(',').map(coord => parseFloat(coord.trim()));
         const description = group.querySelector('.location-description').value.trim();

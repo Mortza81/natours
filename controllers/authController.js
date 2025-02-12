@@ -71,31 +71,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = user
   next()
 })
-// exports.isLoggedIn = catchAsync(async (req, res, next) => {
-//   // 1)checking if token exists
 
-//   if (req.cookies.jwt) {
-//     // 2)verifying
-//     const decoded = await promisify(jwt.verify)(
-//       req.cookies.jwt,
-//       process.env.JWT_SECRET
-//     );
-//     // we could just stop here but it's not safe
-//     // 3)check if user still exists
-//     // we might delete the user in between login and accessing
-//     const user = await User.findById(decoded.id)
-//     if (!user) {
-//       next()
-//     }
-//     // 4)check that if user changed it's password or not
-//     if (user.changedPasswordAfter(decoded.iat)) {
-//       next()
-//     }
-//     res.locals.user = user
-//     return next()
-//   }
-//   next()
-// })
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
@@ -135,7 +111,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   })
   await new Email(newUser,url).sendWelcome()
   createAndSendToken(newUser, 201, res)
-  
 })
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body

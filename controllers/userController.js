@@ -5,15 +5,7 @@ const appError = require('../utils/appErrors')
 const catchAsync = require('../utils/catchAsync')
 const factory = require('../controllers/handlerFactory')
 
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'public/img/users')
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = file.mimetype.split('/')[1]
-//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`)
-//   },
-// })
+
 const multerStorage = multer.memoryStorage()
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.split('/')[0].startsWith('image')) {
@@ -67,13 +59,14 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   })
 })
 exports.updateMe = catchAsync(async (req, res, next) => {
-
   // 1)user shuold not send the password
   if (req.body.password || req.body.passwordConfirm) {
     return next(new appError('this route is not for changing password', 400))
   }
   const objFiltered = filterObj(req.body, 'email', 'name')
-  objFiltered.photo = req.file.filename
+  if(req.file){
+    objFiltered.photo = req.file.filename
+  }
   const user = await User.findByIdAndUpdate(req.user.id, objFiltered, {
     runValidators: true,
     new: true,

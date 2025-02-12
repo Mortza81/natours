@@ -3,15 +3,13 @@ const path = require('path')
 const rateLimit = require('express-rate-limit')
 const compression=require('compression')
 const xss = require('xss-clean')
-const hpp = require('hpp')
 const mongoSanitize = require('express-mongo-sanitize')
-const helmet = require('helmet')
 const { default: mongoose, sanitizeFilter } = require('mongoose')
 const appError = require('./utils/appErrors')
 const globalErrorHandler = require('./controllers/errorController')
 const app = express()
 const cookieParser=require('cookie-parser')
-// فشرده سازی ریسپانس ها
+
 app.use(compression())
 app.use(express.static(path.join(__dirname, 'public')))
 app.set('views', path.join(__dirname, 'views'))
@@ -24,7 +22,6 @@ app.use(cookieParser())
 app.use(mongoSanitize())
 // preventing inserting html
 app.use(xss())
-// app.use(express.static(''))
 // limit requests from one IP
 const limiter = rateLimit({
   max: 100,

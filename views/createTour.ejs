@@ -129,70 +129,71 @@
   </section>
 
   <script>
-    const locationsContainer = document.getElementById('locations-container');
-    const addLocationButton = document.getElementById('add-location-btn');
     document.addEventListener('DOMContentLoaded', () => {
-  flatpickr("#startDate", {
-    dateFormat: "Y-m-d", 
-    minDate: "today",   
-    allowInput: false,   
-    defaultDate: "today" 
-  });
-});
-
-
+      // Initialize Flatpickr for the start date
+      flatpickr("#startDate", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        allowInput: false,
+        defaultDate: "today"
+      });
+  
+      // Function to create a new location input group
       function createLocationInputGroup() {
         const group = document.createElement('div');
         group.classList.add('location-group');
-
+  
         const addressInput = document.createElement('input');
         addressInput.type = 'text';
         addressInput.classList.add('form__input', 'location-address');
         addressInput.placeholder = 'Enter address';
-        addressInput = true;
-
+        addressInput.required = true;
+  
         const coordinatesInput = document.createElement('input');
         coordinatesInput.type = 'text';
         coordinatesInput.classList.add('form__input', 'location-coordinates');
         coordinatesInput.placeholder = 'Enter coordinates (e.g., 40.7128, -74.0060)';
-        coordinatesInput = true;
-
+        coordinatesInput.required = true;
+  
         const descriptionInput = document.createElement('textarea');
         descriptionInput.classList.add('form__input', 'location-description');
         descriptionInput.placeholder = 'Enter description';
         descriptionInput.rows = 2;
-
+  
         const dayInput = document.createElement('input');
         dayInput.type = 'number';
         dayInput.classList.add('form__input', 'location-day');
         dayInput.placeholder = 'Day of tour';
-        dayInput = true;
+        dayInput.required = true;
         dayInput.min = 1;
-
+  
         const removeButton = document.createElement('button');
         removeButton.type = 'button';
         removeButton.classList.add('btn-remove-location', 'btn--small', 'btn--error');
         removeButton.textContent = 'Remove';
         removeButton.style.display = 'inline-block';
-
+  
         removeButton.addEventListener('click', () => {
           locationsContainer.removeChild(group);
         });
-
+  
         group.appendChild(addressInput);
         group.appendChild(coordinatesInput);
         group.appendChild(descriptionInput);
         group.appendChild(dayInput);
         group.appendChild(removeButton);
-
+  
         return group;
       }
-
+  
+      // Add dynamic location inputs
+      const locationsContainer = document.getElementById('locations-container');
+      const addLocationButton = document.getElementById('add-location-btn');
       addLocationButton.addEventListener('click', () => {
         const newGroup = createLocationInputGroup();
         locationsContainer.appendChild(newGroup);
       });
-
+    })
   </script>
 </body>
   <%- include('footer') %>
